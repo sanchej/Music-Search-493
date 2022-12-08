@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+   <title> 493 Artist Search</title>
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"></script>
+   <!--Custom Style-->
+   <link rel="stylesheet" type="text/css" href="index.css">
+   <!--Vue-->
+   <script src="https://unpkg.com/vue@3"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+</head>
+
+<body>
+   <div id='app'>
+      <nav class="navbar navbar-default">
+         <div class="container">
+            <div class="navbar-header">
+               <h3>493 Artist Search</h3>
+            </div>
+         </div>
+      </nav>
+      <div class="container">
+         <div class="row searchbar">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+               <h4>Enter the name of the artist and press enter: </h4>
+               <input @keydown="keyPressRouter" v-model="text" type="text">
+               <p>Search Result (Total {{ Found_num }} Found)</p>
+            </div>
+         </div>
+         <div>
+            <div>
+               <button v-on:click="GenreChangeAll" type="button" class="btn btn-success">ALL</button> 
+               <span v-for="elements in ShownGenres">
+                  <button v-if="!elements.shown" class="btn btn-light active" v-on:click="GenreChange(elements.genre)"  type="button">
+                     {{ elements.genre }}
+                     </button>
+                     <button v-else class="btn btn-primary" v-on:click="GenreChange(elements.genre)" type="button">
+                     {{ elements.genre }}
+                     </button>
+               </span>
+            </div>
+            <h4>
+               List of results
+            </h4>
+         </div>
+         <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+               Sort list of results by:
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+
+              <li v-if="ddmr"><a v-on:click="KEYCHANGE('')" class="btn-primary active" href="#">Reset to original</a></li>
+              <li v-else><a v-on:click="KEYCHANGE('')" href="#">Reset to original</a></li>
+
+              <li v-if="ddmn"><a v-on:click="KEYCHANGE('collectionName')" class="btn-primary active" href="#">Collection Name</a></li>
+              <li v-else><a v-on:click="KEYCHANGE('collectionName')" href="#">Collection Name</a></li>
+
+              <li v-if="ddmp"><a v-on:click="KEYCHANGE('collectionPrice')" class="btn-primary active" href="#">Price</a></li>
+              <li v-else><a v-on:click="KEYCHANGE('collectionPrice')" href="#">Price</a></li>
+
+            </ul>
+          </div>
+         <div>
+            <div v-for="elements in data_show" class='col-lg-6 col-md-6 col-sm-6 artist'>
+               <div class='artist-albumcover col-sm-4'>
+                  <img v-bind:src="elements.artworkUrl100">
+               </div>
+
+               <div class='artist-info col-sm-6'>
+                  <ul class="nav nav-tabs">
+                     <li v-if="!elements.InfoTab" class="active"><a v-on:click="elements.InfoTab = false" data-toggle="tab" >Description</a></li>
+                     <li v-else><a v-on:click="elements.InfoTab = false" data-toggle="tab" >Description</a></li>
+                     <li v-if="elements.InfoTab" class="active"><a v-on:click="elements.InfoTab = true" data-toggle="tab">Track Info.</a></li>
+                     <li v-else><a v-on:click="elements.InfoTab = true" data-toggle="tab">Track Info.</a></li>
+
+                  </ul>
+                  <div v-if="elements.InfoTab == false" class="tab-content">
+                     <p><b>Artist Name:</b> {{ elements.artistName }} </p>
+                     <p><b>Collection Name:</b> {{ elements.collectionName }} </p>
+                     <p><b>Price:</b> {{ elements.collectionPrice }} </p>
+                     <p><b>Kind:</b> {{ elements.kind }} </p>
+                     <p><b>Preview:</b> <a href="elements.previewUrl">Link</a></p>
+                  </div>
+                  <div v-if="elements.InfoTab" class="tab-content">
+                     <p><b>Track ID:</b> {{ elements.trackId }} </p>
+                     <p><b>Country:</b> {{ elements.country }} </p>
+                     <p><b>COLL ID:</b> {{ elements.collectionId }} </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <script src="script.js"></script>
+</body>
+</html>
